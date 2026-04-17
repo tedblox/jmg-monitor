@@ -31,7 +31,7 @@ jobs:
           ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
           ALERT_EMAIL_FROM: ${{ secrets.ALERT_EMAIL_FROM }}
           # Remove the line below once testing is done
-          TEST_MODE: "true"
+          #TEST_MODE: "true"
         run: python monitor.py
 
       - name: Commit state file
