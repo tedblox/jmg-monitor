@@ -5,7 +5,7 @@ import requests
 from datetime import datetime, timezone
 
 TICKER = "JMG"
-CIK = "0002049290"
+CIK = "0002049717"
 STATE_FILE = "state.json"
 
 EDGAR_CIK_URL = f"https://data.sec.gov/submissions/CIK{CIK}.json"
