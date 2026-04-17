@@ -94,17 +94,20 @@ def check_sec_filings(state: dict):
         print(f"[EDGAR] Latest filing: {latest_accession} | Form: {latest_form} | Date: {latest_date}")
         print(f"[EDGAR] Last seen accession in state: {state.get('last_accession')}")
 
+        latest = {
+            "accession": latest_accession,
+            "form": latest_form,
+            "date": latest_date,
+            "company": data.get("name", "JM Group Limited"),
+        }
+
         if latest_accession != state.get("last_accession"):
             print("[EDGAR] ✅ New filing detected!")
             state["last_accession"] = latest_accession
-            return True, {
-                "accession": latest_accession,
-                "form": latest_form,
-                "date": latest_date,
-                "company": data.get("name", "JM Group Limited"),
-            }
+            return True, latest   # is_new=True
         else:
             print("[EDGAR] No new filings since last check.")
+            return False, latest  # is_new=False, still return data for test email
 
     except Exception as e:
         print(f"[EDGAR] ❌ Error: {e}")
@@ -308,10 +311,11 @@ def main():
     # --- Test mode: always send a summary email ---
     if TEST_MODE:
         yahoo_meta = get_yahoo_price()
-        edgar_info = {
-            "accession": state.get("last_accession"),
-            "form": filing_data.get("form") if filing_data else "N/A",
-            "date": filing_data.get("date") if filing_data else "N/A",
+        # filing_data is always returned now (new or existing), so show real values
+        edgar_info = filing_data if filing_data else {
+            "accession": "Not found",
+            "form": "N/A",
+            "date": "N/A",
         }
         subject, body = test_summary_email(edgar_info, now_halted, yahoo_meta, now)
         send_email(subject, body)
