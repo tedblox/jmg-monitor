@@ -12,7 +12,7 @@ jobs:
   monitor:
     runs-on: ubuntu-latest
     permissions:
-      contents: write        # Needed to commit state file back to repo
+      contents: write
 
     steps:
       - uses: actions/checkout@v4.2.2
@@ -30,6 +30,8 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
           ALERT_EMAIL_FROM: ${{ secrets.ALERT_EMAIL_FROM }}
+          # Remove the line below once testing is done
+          TEST_MODE: "true"
         run: python monitor.py
 
       - name: Commit state file
